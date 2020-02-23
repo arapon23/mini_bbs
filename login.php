@@ -7,7 +7,7 @@ if ($_COOKIE['email'] !== '') {
 }
 
 if (!empty($_POST)) {
-  $email = $_POST['email'];
+  $email = $_POST['email'];  // ログインがクリックされた場合、クッキーの値を上書き
 
   if ($_POST['email'] !== '' && $_POST['password'] !== '') {
     // ANDと,の確認
@@ -22,17 +22,17 @@ if (!empty($_POST)) {
       $_SESSION['id'] = $member['id'];
       $_SESSION['time'] = time();
 
-      if ($_POST['save'] === 'on') {
-        setcookie('email', $_POST['email'], time()+60*60*24*14);
+      if ($_POST['save'] === 'on') {  // 「次回から自動的にログイン」にチェックを入れた場合
+        setcookie('email', $_POST['email'], time()+60*60*24*14); // クッキーにemailを14日間保持
       }
 
       header('Location: index.php');
       exit();
     } else {
-      $error['login'] = 'failed';
+      $error['login'] = 'failed';  // ログイン に失敗している
     }
   } else {
-    $error['login'] = 'blank';
+    $error['login'] = 'blank';  // どちらかメールorパスワードが空
   }
 }
 ?>
@@ -61,7 +61,8 @@ if (!empty($_POST)) {
         <dl>
           <dt>メールアドレス</dt>
           <dd>
-            <input type="text" name="email" size="35" maxlength="255" value="<?php print(htmlspecialchars($email, ENT_QUOTES)); ?>" />
+          <!-- value=としておく事で、エラーが起きてもその「メールアドレス」を入れて置く事ができる -->
+            <input type="text" name="email" size="35" maxlength="255" value="<?php print(htmlspecialchars($email, ENT_QUOTES)); ?>" />   
             <?php if ($error['login'] === 'failed'): ?>
               <p class="error">* ログインに失敗しました。正しくご記入ください</p>
             <?php endif; ?>
@@ -71,6 +72,7 @@ if (!empty($_POST)) {
           </dd>
           <dt>パスワード</dt>
           <dd>
+          <!-- value=としておく事で、エラーが起きてもその「パスワード」を入れて置く事ができる -->
             <input type="password" name="password" size="35" maxlength="255" value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
           </dd>
           <dt>ログイン情報の記録</dt>

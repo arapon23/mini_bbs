@@ -14,12 +14,11 @@ if (!empty($_POST)) {
 	  $statement->execute(array(
 		$_SESSION['join']['name'],
 		$_SESSION['join']['email'],
-		sha1($_SESSION['join']['password']),
+		sha1($_SESSION['join']['password']),  // sha1: 暗号化
 		$_SESSION['join']['image']
 	));
-	unset($_SESSION['join']);  // 指定した変数の割り当てを解除(データベースへの負荷を防ぐ)
-	
-	header('Location: thanks.php');
+	unset($_SESSION['join']);  // データベース登録後、セッション変数を空にする(データベースへの重複を防ぐ)
+	header('Location: thanks.php');  // 完了画面へアクセス
 	exit();
 }
 ?>
